@@ -1,4 +1,4 @@
-/ **
+/*
  * TG频道图片推送
  * @作者：Peng-YM
  *更新地址：https：//raw.githubusercontent.com/Peng-YM/QuanX/master/Tasks/telegram.js
@@ -7,7 +7,7 @@
  *例如频道= [“ ABCD”，“ CDEF”]
  * 2.在maxMedias设置每个频道最多显示的图片数量，某些说设置为3，则只会显示最近的3张图片。
  * 3. alwaysNotice控制是否重复显示已经看过的图片，如果设置为false，则只会显示更新的图片。
- * /
+ */
 
 让频道= [“ xunvpn”];
 让maxMedias = 3;
