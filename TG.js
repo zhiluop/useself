@@ -1,4 +1,4 @@
-/*
+/**
  * TG频道图片推送
  * @作者：Peng-YM
  *更新地址：https：//raw.githubusercontent.com/Peng-YM/QuanX/master/Tasks/telegram.js
@@ -9,7 +9,7 @@
  * 3. alwaysNotice控制是否重复显示已经看过的图片，如果设置为false，则只会显示更新的图片。
  */
 
-让频道= [“ xunvpn”];
+让频道= [“ xqsranimegif”];
 让maxMedias = 3;
 让alwaysNotice = false;
 
