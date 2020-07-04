@@ -1,0 +1,209 @@
+#!name=Task - All in one By nzw9314
+#!desc=该模块适用于定时签到:集成全部: NobyDa、Chavy以及个人收集常用签到脚本。建议本地安装以便自定义修改签到时间。
+#!system=ios
+
+# Task配置 By nzw9314
+# GitHub主页(https://github.com/nzw9314)
+# TG通知频道 (https://t.me/nzw9314News)
+# 定时脚本
+
+[Script]
+# > 天气+生活指数+降雨提醒
+天气+生活指数+降雨提醒= type=cron,cronexp=0 0-21/3 * * *,script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Task/minute_forecast.js
+
+# > 一言
+一言+历史上的今天 = script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Meeta/Surge/Scripting/Calendar.js,type=cron,cronexp=0 0 8 * * *
+
+
+# > GitHub监控(By Peng-YM)
+# name: "",//填写仓库名称，可自定义
+# file_names:[],//可选参数。若需要监控具体文件或目录，请填写路径
+GitHub监控= type=cron,cronexp=8 0 * * *,script-path=https://raw.githubusercontent.com/Peng-YM/QuanX/master/Tasks/github.js
+
+# > Steam价格监控(By Peng-YM)
+# 1. 浏览器打开steam网站：https://store.steampowered.com/，搜索你想添加的游戏。
+# 2. 以GTA5为例，GTA5的STEAM商店链接为：https://store.steampowered.com/app/271590/Grand_Theft_Auto_V/。
+# 3. id中填写271590即可, name中填写名字。
+Steam价格监控= type=cron,cronexp=8 0 * * *,script-path=https://raw.githubusercontent.com/Peng-YM/QuanX/master/Tasks/steam.js
+
+# > 汇率监控(By Peng-YM)
+汇率监控= type=cron,cronexp=8 0 * * *,script-path=https://raw.githubusercontent.com/Peng-YM/QuanX/master/Tasks/exchange.js
+
+# > Epic周免(By Peng-YM)
+Epic周免= type=cron,cronexp=0 8 */7 * *,script-path=https://raw.githubusercontent.com/Peng-YM/QuanX/master/Tasks/epic.js
+
+
+# 签到脚本
+
+#  NobyDa
+# > 京东
+京东 = type=cron,cronexp=0 0 0 * * *,script-path=https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js,script-update-interval=0
+
+# > 哔哩哔哩漫画
+哔哩哔哩漫画 = type=cron,cronexp=15 0 0 * *,script-path=https://raw.githubusercontent.com/NobyDa/Script/master/Bilibili-DailyBonus/Manga.js,script-update-interval=0
+# > 百度签到
+# 打开App,点击'我的'
+百度贴吧 = type=cron,cronexp="0 0,1,2 0 * * *",script-path=https://raw.githubusercontent.com/NobyDa/Script/master/BDTieBa-DailyBonus/TieBa.js,script-update-interval=0
+
+# @chavyleung
+# 电信营业厅
+# 打开 APP 手动签到一次: 访问下右下角 `我` > `签到` (头像下面)
+电信营业厅 = type=cron,cronexp=20 0 0 * * *,script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/10000/10000.js,script-update-interval=0
+
+# bilibili
+# 打开浏览器访问: https://www.bilibili.com 或 https://live.bilibili.com
+哔哩哔哩 = type=cron,cronexp=35 0 0 * * *,script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/bilibili/bilibili.js,script-update-interval=0
+# 如需银瓜子转硬币，取消下方注释
+瓜子转硬币 = type=cron,cronexp=40 0 0 * * *,script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/bilibili/bilibili.silver2coin.js,script-update-interval=0
+
+# 威锋网
+# 打开浏览器访问: https://www.feng.com`(先登录! 把页面切换为电脑版)`
+威锋 = type=cron,cronexp=50 0 0 * * *,script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/feng/feng.js,script-update-interval=0
+
+# 网易云音乐
+# 浏览器访问并登录: https://music.163.com/m/login
+网易云音乐 = type=cron,cronexp=0 1 0 * * *,script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/neteasemusic/neteasemusic.js,script-update-interval=0
+
+# 人人视频
+# 打开 APP, 访问下`个人中心`
+人人视频 = type=cron,cronexp=15 1 0 * * *,script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/rrtv/rrtv.js,script-update-interval=0
+
+# 腾讯视频
+# 1.手机浏览器访问并登录: https://film.qq.com/
+腾讯视频 = type=cron,cronexp=35 1 0 * * *,script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/videoqq/videoqq.js,script-update-interval=0
+
+# CSDN
+# 打开 APP , 系统提示: `获取刷新链接: 成功`,然后手动签到 1 次, 系统提示: `获取Cookie: 成功`
+CSDN = type=cron,cronexp=0 2 0 * * *,script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/csdn/csdn.js,script-update-interval=0
+
+# 美团外卖
+# 打开 APP , 进入签到页面, 系统提示: `获取刷新链接: 成功`,然后手动签到 1 次
+美团外卖 = type=cron,cronexp=35 2 0 * * *,script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/wmmeituan/wmmeituan.js,script-update-interval=0
+# 美团
+# 打开 APP , 然后手动签到 1 次, (`首页` > `红包签到`)
+美团 = type=cron,cronexp=40 2 0 * * *,script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/meituan/meituan.js,script-update-interval=0
+
+# WPS
+# 打开 APP 我 > 签到 (右上角, 不用手动签到)
+# 打开 `我的WPS会员` 小程序 (手动签到)
+WPS = type=cron,cronexp=35 3 0 * * *,script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/wps/wps.js,script-update-interval=0
+
+# 哈啰出行
+# 打开 APP 进入签到页面:  `我的` > `有哈有车`
+哈啰出行 = type=cron,cronexp=10 4 0 * * *,script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/hellobike/hellobike.js,script-update-interval=0
+
+# > 京东618
+//京东618=type=cron,cronexp="10,20,30,40,50 0 * * *",script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/jd/jd.618.js,wake-system=true,timeout=600
+//京东618炸弹 = type=cron,cronexp="0 10,12,18,20 * * *",script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/jd/jd.618.boom.js,wake-system=true
+
+# > 有道云笔记
+有道云笔记 = type=cron,cronexp="3 0 * * *",script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/noteyoudao/noteyoudao.js,wake-system=true
+
+# > 切换会话
+切换会话 = type=cron,cronexp="0 12 * * *",script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/box/switcher/box.switcher.js,wake-system=true
+
+#  其他
+
+
+# > 饿了么   (By @syzzzf)
+# 打开 APP, 访问下`我的`>`签到领红包`(左上角)
+饿了么 = type=cron,cronexp=35 4 0 * * *,script-path=https://raw.githubusercontent.com/songyangzz/QuantumultX/master/elem/elemSign.js,script-update-interval=0
+饿了么-打卡领红包= type=cron,cronexp=35 4 0 * * *,script-path=https://raw.githubusercontent.com/zZPiglet/Task/master/elem/elemCheckIn.js
+
+# > 中国电信套餐 (By @uchvk& @Macsuny)
+# 下载安装 天翼账号中心 登录
+中国电信套餐 = type=cron,cronexp=50 4 0 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/telecomInfinity.js,script-update-interval=0
+# > 腾讯新闻 (By 红鲤鱼与绿鲤鱼与驴 & Macsuny))
+# 打开腾讯新闻app，阅读一篇文章，右下角出现红包，倒计时结束后即可
+腾讯新闻 = type=cron,cronexp=35 0 0 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews.js,script-update-interval=0
+
+# > 京东成长分 (By @barrymchen)
+# 打开京东金融app，“信用”-》“小白成长分”
+京东成长分 = type=cron,cronexp=10 5 0 * * *,script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Task/jdczf.js,script-update-interval=0
+
+# > 微信小程序-来客有礼 (By @Macsuny)
+# 微信搜索’来客有礼‘小程序,登陆京东账号，点击’领京豆->翻牌‘
+来客有礼 = type=cron,cronexp=30 5 0 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/lkyl.js,script-update-interval=0
+
+# > 电视家 (By @Macsuny)
+# APP登陆账号后，点击底部’赚赚‘进入签到页面,即可获取Cookie.
+电视家 = type=cron,cronexp=0 0 7,22 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/dianshijia.js,script-update-interval=0
+
+# > 微博 & 微博钱包 (By @Macsuny)
+#1.打开微博App获取Cookie.获取后请注释或禁用Cookie
+#2.打开微博钱包点击签到，获取Cookie，
+#3.钱包已经签到无法获取
+微博(钱包) = type=cron,cronexp=35 0 0 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/weibo.js,script-update-interval=0
+
+# > 喜马拉雅极速版(By @Macsuny)
+# APP登陆账号后，点击右下角’福利’选项,即可获取Cookie.
+# 每隔一小时开启一次，每天最多5次，金币账户与标准版不同账户
+# 喜马拉雅极速版 = type=cron,cronexp=0 6 0-5/1 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/xmspeed.js
+# > 新浪新闻(By @Macsuny)
+# 1.打开app,点击”我的“=>”签到“，获取第一个Cookie，通知获取信息成功
+# 2.在未签到情况下，先禁用第一条Cookie链接，然后再次进入签到，通知获取签到Cookie成功
+新浪新闻 = type=cron,cronexp=0 5 0 * * *,script-path=Script/txnews.jshttps://raw.githubusercontent.com/Sunert/Scripts/master/Task/sinanews.js
+
+# > 中青看点极速版 (By @Macsuny)
+# 1.进入app，签到一次,即可获取Cookie. 
+# 2.阅读一篇文章，获取阅读请求body，
+# 3.在阅读文章最下面有个惊喜红包，点击获取惊喜红包请求
+# 4.激励视频获取方法: 关闭vpn，进入任务中心=>抽奖赚点击下面第一个宝箱，出现视频广告页面，然后打开vpn，等待视频播放完毕，点击点我继续领青豆，再重复一次上面操作，获取激励视频请求的body
+中青看点极速版 = type=cron,cronexp=35 5 0 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/youth.js,script-update-interval=0
+
+# > 微信小程序-活动抽奖 (By @makexp & @zZPiglet)
+#打开微信小程序 进入“活动抽奖”，手动签到一次或点击“已签到”
+活动抽奖 = type=cron,cronexp=0 6 0 * * *,script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Task/WeChatLottery_new.js
+
+# > 滴滴出行 (By @zZPiglet)
+# 进入"滴滴出行"，若弹出"首次写入滴滴出行 Token 成功"
+滴滴出行 = type=cron,cronexp=0 6 0 * * *,script-path=https://raw.githubusercontent.com/zZPiglet/Task/master/DiDi/DiDi.js
+
+滴滴出行 = type=cron,cronexp=0 59 23 * * *,script-path=script-path=https://raw.githubusercontent.com/zZPiglet/Task/master/DiDi/DiDi_reward.js
+
+# > 115 (By @zZPiglet)
+# 进入"115"并摇一摇
+115 = type=cron,cronexp=1 0 * * *,script-path=script-path=https://raw.githubusercontent.com/zZPiglet/Task/master/115/115.js
+
+# > 微信小程序-喜马拉雅 (By @makexp)
+# 微信小程序 - 喜马拉雅 - 我的： 签到 “ 获取 Cookie
+微信小程序-喜马拉雅 = type=cron,cronexp=5 6 0 * * *,script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Task/xmly_wc.js
+
+# > 京东农场 (By liuxiaoyucc、lxk0301 & iepngs)
+# 京东App - 右下角"我的"- 游戏与互动- 东东农场
+京东农场= type=cron,cronexp=8 0 * * *,script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Task/jd_fruit.js
+
+# > 京东萌宠 (By liuxiaoyucc、lxk0301 & iepngs)
+# 京东App - 右下角"我的"- 游戏与互动-东东萌宠
+京东农场= type=cron,cronexp=8 0 * * *,script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Task/jd_pet.js
+
+# > 京东宠汪汪 (By uniqueque、lxk0301 & iepngs)
+# 京东App - 右下角"我的"- 游戏与互动-宠汪汪
+京东宠汪汪= type=cron,cronexp=0 */3 * * *,script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Task/jd_joy.js
+
+# > 京东种豆得豆 (By uniqueque、lxk0301 & iepngs)
+# 京东App - 右下角"我的"- 游戏与互动-种豆得豆
+京东种豆得豆= type=cron,cronexp=8 7-21/3 * * *,script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Task/jd_plantBean.js
+
+# > 京东摇钱树 (By lxk0301)
+# 京东App - 右下角"我的"- 游戏与互动-摇钱树
+京东摇钱树=type=cron,cronexp=*/6 * * * *,script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Task/jd_moneyTree.js
+
+# > 京东加速 (By lxk0301)
+# 京东App - 右下角"我的"- 游戏与互动-天天加速
+京东加速=type=cron,cronexp=0 */3 * * *,script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Task/jd_speed.js
+
+# > 微博超话 (By Evilbutcher & toulanboy)
+# 1.打开微博APP，"我的"， "超话社区"， "底部栏--我的"， "关注"， 弹出通知，提示获取已关注超话链接成功。
+# 2. 点进一个超话页面，手动签到一次。弹出通知，提示获取超话签到链接成功。 若之前所有已经签到，关注一个新超话进行签到。
+微博超话 = type=cron,cronexp=5 0 * * *,script-path=https://raw.githubusercontent.com/toulanboy/scripts/master/weibo/weibotalk.js,wake-system=true,timeout=600
+
+# > qq会员成长值签到 (By @lowking0415)
+# 手机qq进入左侧会员，滑动即可
+qq会员签到 = type=cron,cronexp=0 0 0,1 * * ?,wake-system=1,script-path=https://raw.githubusercontent.com/lowking/Scripts/master/QQVip/qqVipCheckIn.js,script-update-interval=0
+
+# 惠头条签(By 红鲤鱼与绿鲤鱼与驴)
+# 作者的邀请码:53150681 
+# nzw9314邀请码: 12773106
+#时段签到, 阅读数据, 小视频和视频 4个cookie
+惠头条type=cron,cronexp=*/2 0-11/1 * * *,wake-system=1,script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Task/htt_task.js
