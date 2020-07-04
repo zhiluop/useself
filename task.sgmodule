@@ -1,11 +1,6 @@
-#!name=Task - All in one By nzw9314
-#!desc=该模块适用于定时签到:集成全部: NobyDa、Chavy以及个人收集常用签到脚本。建议本地安装以便自定义修改签到时间。
+#!name=Task 
+#!desc=个人常用签到脚本。
 #!system=ios
-
-# Task配置 By nzw9314
-# GitHub主页(https://github.com/nzw9314)
-# TG通知频道 (https://t.me/nzw9314News)
-# 定时脚本
 
 [Script]
 # > 天气+生活指数+降雨提醒
@@ -37,7 +32,7 @@ Epic周免= type=cron,cronexp=0 8 */7 * *,script-path=https://raw.githubusercont
 
 #  NobyDa
 # > 京东
-京东 = type=cron,cronexp=0 0 0 * * *,script-path=https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js,script-update-interval=0
+京东 = type=cron,cronexp=0 0 1,23 * * *,script-path=https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js,script-update-interval=0
 
 # > 哔哩哔哩漫画
 哔哩哔哩漫画 = type=cron,cronexp=15 0 0 * *,script-path=https://raw.githubusercontent.com/NobyDa/Script/master/Bilibili-DailyBonus/Manga.js,script-update-interval=0
@@ -100,7 +95,7 @@ WPS = type=cron,cronexp=35 3 0 * * *,script-path=https://raw.githubusercontent.c
 有道云笔记 = type=cron,cronexp="3 0 * * *",script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/noteyoudao/noteyoudao.js,wake-system=true
 
 # > 切换会话
-切换会话 = type=cron,cronexp="0 12 * * *",script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/box/switcher/box.switcher.js,wake-system=true
+//切换会话 = type=cron,cronexp="0 12 * * *",script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/box/switcher/box.switcher.js,wake-system=true
 
 #  其他
 
@@ -113,9 +108,10 @@ WPS = type=cron,cronexp=35 3 0 * * *,script-path=https://raw.githubusercontent.c
 # > 中国电信套餐 (By @uchvk& @Macsuny)
 # 下载安装 天翼账号中心 登录
 中国电信套餐 = type=cron,cronexp=50 4 0 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/telecomInfinity.js,script-update-interval=0
+
 # > 腾讯新闻 (By 红鲤鱼与绿鲤鱼与驴 & Macsuny))
 # 打开腾讯新闻app，阅读一篇文章，右下角出现红包，倒计时结束后即可
-腾讯新闻 = type=cron,cronexp=35 0 0 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews.js,script-update-interval=0
+腾讯新闻 = type=cron,cronexp=0 */8 0-22 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews.js,script-update-interval=0
 
 # > 京东成长分 (By @barrymchen)
 # 打开京东金融app，“信用”-》“小白成长分”
