@@ -15,7 +15,7 @@ Surge 4.0
 [Script]
 腾讯新闻 = type=cron,cronexp=0 8 0 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews.js,script-update-interval=0
 
-腾讯新闻 = type=http-request,pattern=https:\/\/api\.inews\.qq\.com\/event\/v1\/user\/event\/report\?,script-path=txnews2.js, requires-body=true
+腾讯新闻 = type=http-request,pattern=https:\/\/api\.inews\.qq\.com\/event\/v1\/user\/event\/report\?,script-path=txnews.js, requires-body=true
 
 ~~~~~~~~~~~~~~~~~~~~~
 Loon 2.1.0+
@@ -23,7 +23,7 @@ Loon 2.1.0+
 # 本地脚本
 cron "04 00 * * *" script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews.js, enabled=true, tag=腾讯新闻
 
-http-request https:\/\/api\.inews\.qq\.com\/event\/v1\/user\/event\/report\? script-path=txnews2.js, requires-body=true
+http-request https:\/\/api\.inews\.qq\.com\/event\/v1\/user\/event\/report\? script-path=txnews.js, requires-body=true
 
 -----------------
 
@@ -31,7 +31,7 @@ QX 1.0.7+ :
  [task_local]
 0 9 * * * txnews.js, tag=腾讯新闻
  [rewrite_local]
-https:\/\/api\.inews\.qq\.com\/event\/v1\/user\/event\/report\? url script-request-body txnews2.js
+https:\/\/api\.inews\.qq\.com\/event\/v1\/user\/event\/report\? url script-request-body txnews.js
 
 ~~~~~~~~~~~~~~~~~~
  [MITM]
@@ -42,13 +42,13 @@ hostname = api.inews.qq.com
 Cookie获取后，请注释掉Cookie地址。
 
 */
-const notifyInterval = 3 //视频红包间隔通知开为1，常关为0
-const logs = 0; // 日志开关，0为关，1为开
+const notifyInterval = 4 //视频红包间隔通知开为1，常关为0
+const logs = 1; // 日志开关，0为关，1为开
 const cookieName = '腾讯新闻'
 const sy = init()
-const signurlVal = sy.getdata('sy_signurl_txnews2')
-const cookieVal = sy.getdata( 'sy_cookie_txnews2')
-const videoVal = sy.getdata( 'video_txnews2')
+const signurlVal = sy.getdata('sy_signurl_txnews')
+const cookieVal = sy.getdata( 'sy_cookie_txnews')
+const videoVal = sy.getdata( 'video_txnews')
 
 let isGetCookie = typeof $request !== 'undefined'
 if (isGetCookie) {
@@ -63,14 +63,14 @@ if ($request && $request.method != 'OPTIONS' && $request.url.match(/user\/event\
   const cookieVal = $request.headers['Cookie'];
   sy.log(`signurlVal:${signurlVal}`)
   sy.log(`cookieVal:${cookieVal}`)
-  if (signurlVal) sy.setdata(signurlVal, 'sy_signurl_txnews2')
-  if (cookieVal) sy.setdata(cookieVal,  'sy_cookie_txnews2')
+  if (signurlVal) sy.setdata(signurlVal, 'sy_signurl_txnews')
+  if (cookieVal) sy.setdata(cookieVal,  'sy_cookie_txnews')
   sy.msg(cookieName, `获取Cookie: 成功🎉`, ``)
   }
 if ($request && $request.method != 'OPTIONS' && $request.url.match(/user\/event\/report\?/)&&$request.body.indexOf("video_read")!= -1) {
   const videoVal =  $request.url
   sy.log(`videoVal:${videoVal}`)
-  if (videoVal) sy.setdata(videoVal,  'video_txnews2')
+  if (videoVal) sy.setdata(videoVal,  'video_txnews')
   sy.msg(cookieName, `获取视频地址: 成功🎉`, ``)
   }
 
