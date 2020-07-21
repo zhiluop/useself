@@ -55,7 +55,7 @@ https:\/\/.*.xiaoxiao(img|apps|appxs).com header-replace Cookie xxx_api_auth=613
 
 [Script]
 # 彩云天气 Vip
-彩云天气 = type=http-response,pattern=https://biz.caiyunapp.com/v2/user\?app_name=weather,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/nzw9314/Surge/master/Script/caiyun.js
+彩云天气 = type=http-response,pattern=https://biz.caiyunapp.com/v2/user\?app_name=weather,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zhiluop/useself/master/surge/color.js
 
 # > yichahucha
 # > 京东比价
