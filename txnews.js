@@ -274,11 +274,13 @@ return new Promise((resolve, reject) => {
     url: `https://api.inews.qq.com/activity/v1/usercenter/activity/list?isJailbreak`,
     headers: {Cookie: cookieVal}};
     sy.post(totalUrl, function(error,response, data) {
-   
+    if (error) {
+      sy.msg("获取收益信息失败‼️", "", error)
+    } else {
     if (logs) console.log("获取收益信息" +data)
      const obj = JSON.parse(data)
       subTile = '【收益总计】'+obj.data.wealth[0].title +'金币  '+"现金: " +obj.data.wealth[1].title+'元'
-        
+        }
      resolve()
       })
    })
