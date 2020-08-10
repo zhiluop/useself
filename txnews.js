@@ -1,4 +1,7 @@
 /*
+
+搬运自Sunert大佬脚本，删掉了收益错误通知
+
 更新时间: 2020-07-12 22:40
 
 腾讯新闻签到修改版，可以自动阅读文章获取红包，该活动为瓜分百万现金挑战赛，针对幸运用户参与
@@ -15,25 +18,25 @@
 ---------------------
 Surge 4.0
 [Script]
-腾讯新闻 = type=cron,cronexp=0 8 0 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews.js,script-update-interval=0
+腾讯新闻 = type=cron,cronexp=0 8 0 * * *,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews2.js,script-update-interval=0
 
-腾讯新闻 = type=http-request,pattern=https:\/\/api\.inews\.qq\.com\/event\/v1\/user\/event\/report\?,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews.js, requires-body=true
+腾讯新闻 = type=http-request,pattern=https:\/\/api\.inews\.qq\.com\/event\/v1\/user\/event\/report\?,script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews2.js, requires-body=true
 
 ~~~~~~~~~~~~~~~~~~~~~
 Loon 2.1.0+
 [Script]
 # 本地脚本
-cron "04 00 * * *" script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews.js, enabled=true, tag=腾讯新闻
+cron "04 00 * * *" script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews2.js, enabled=true, tag=腾讯新闻
 
-http-request https:\/\/api\.inews\.qq\.com\/event\/v1\/user\/event\/report\? script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews.js, requires-body=true
+http-request https:\/\/api\.inews\.qq\.com\/event\/v1\/user\/event\/report\? script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/txnews2.js, requires-body=true
 
 -----------------
 
 QX 1.0.7+ :
  [task_local]
-0 9 * * * txnews.js, tag=腾讯新闻
+0 9 * * * txnews2.js, tag=腾讯新闻
  [rewrite_local]
-https:\/\/api\.inews\.qq\.com\/event\/v1\/user\/event\/report\? url script-request-body txnews.js
+https:\/\/api\.inews\.qq\.com\/event\/v1\/user\/event\/report\? url script-request-body txnews2.js
 
 ~~~~~~~~~~~~~~~~~~
  [MITM]
@@ -45,12 +48,12 @@ Cookie获取后，请注释掉Cookie地址。
 
 */
 const notifyInterval = 4; //视频红包间隔通知开为1，常关为0
-const logs = 1; // 日志开关
+const logs = 0; // 日志开关
 const cookieName = '腾讯新闻'
-const sy = init()
-const signurlVal = sy.getdata('sy_signurl_txnews')
-const cookieVal = sy.getdata( 'sy_cookie_txnews')
-const videoVal = sy.getdata( 'video_txnews')
+const sy = new Env(cookieName)
+const signurlVal = sy.getdata('sy_signurl_txnews2')
+const cookieVal = sy.getdata( 'sy_cookie_txnews2')
+const videoVal = sy.getdata( 'video_txnews2')
 
 let isGetCookie = typeof $request !== 'undefined'
 if (isGetCookie) {
@@ -63,16 +66,16 @@ function GetCookie() {
 if ($request && $request.method != 'OPTIONS' && $request.url.match(/user\/event\/report\?/)&&$request.body.indexOf("article_read")!= -1) {
   const signurlVal =  $request.url
   const cookieVal = $request.headers['Cookie'];
-  sy.log(`signurlVal:${signurlVal}`)
-  sy.log(`cookieVal:${cookieVal}`)
-  if (signurlVal) sy.setdata(signurlVal, 'sy_signurl_txnews')
-  if (cookieVal) sy.setdata(cookieVal,  'sy_cookie_txnews')
+  console.log(`signurlVal:${signurlVal}`)
+  console.log(`cookieVal:${cookieVal}`)
+  if (signurlVal) sy.setdata(signurlVal, 'sy_signurl_txnews2')
+  if (cookieVal) sy.setdata(cookieVal,  'sy_cookie_txnews2')
   sy.msg(cookieName, `获取Cookie: 成功🎉`, ``)
   }
 if ($request && $request.method != 'OPTIONS' && $request.url.match(/user\/event\/report\?/)&&$request.body.indexOf("video_read")!= -1) {
   const videoVal =  $request.url
   sy.log(`videoVal:${videoVal}`)
-  if (videoVal) sy.setdata(videoVal,  'video_txnews')
+  if (videoVal) sy.setdata(videoVal,  'video_txnews2')
   sy.msg(cookieName, `获取视频地址: 成功🎉`, ``)
   }
  }
@@ -98,7 +101,7 @@ function getsign() {
     url: `https://api.inews.qq.com/task/v1/user/signin/add?`,headers:{Cookie: cookieVal}
   };
    sy.post(llUrl, (error, response, data) => {   
-      if(logs)sy.log(`${cookieName}签到 - data: ${data}`)
+      if(logs)console.log(`${cookieName}签到 - data: ${data}`)
       const obj = JSON.parse(data)
       if (obj.info=="success"){
        next = obj.data.next_points
@@ -124,7 +127,7 @@ return new Promise((resolve, reject) => {
     body: 'event=article_read'
   };
    sy.post(toreadUrl,(error, response, data) =>{
-     if(logs)sy.log(`${cookieName}阅读文章 - data: ${data}`)
+     if(logs)console.log(`${cookieName}阅读文章 - data: ${data}`)
     resolve()
     })
    })
@@ -157,7 +160,7 @@ return new Promise((resolve, reject) => {
    headers: {Cookie: cookieVal}
   }
     sy.get(StepsUrl, (error, response, data) => {
-     if(logs)sy.log(`${cookieName}文章统计- data: ${data}`)
+     if(logs)console.log(`${cookieName}文章统计- data: ${data}`)
        totalred = JSON.parse(data)
         if (totalred.ret == 0){
      for (i=0;i<totalred.data.award.length;i++){
@@ -274,13 +277,11 @@ return new Promise((resolve, reject) => {
     url: `https://api.inews.qq.com/activity/v1/usercenter/activity/list?isJailbreak`,
     headers: {Cookie: cookieVal}};
     sy.post(totalUrl, function(error,response, data) {
-    if (error) {
-      sy.msg("获取收益信息失败‼️", "", error)
-    } else {
+   
     if (logs) console.log("获取收益信息" +data)
      const obj = JSON.parse(data)
       subTile = '【收益总计】'+obj.data.wealth[0].title +'金币  '+"现金: " +obj.data.wealth[1].title+'元'
-        }
+        
      resolve()
       })
    })
@@ -298,7 +299,7 @@ return new Promise((resolve, reject) => {
      //console.log("获取活动Id" +data)
      const obj = JSON.parse(data)
       actid = obj.data.activity.id
-      sy.log(`您的活动ID为:`+actid)
+      console.log(`您的活动ID为:`+actid)
         }
      resolve()
       })
@@ -309,75 +310,21 @@ function showmsg() {
  return new Promise((resolve, reject) => {
   if(readnum&&videonum){
    detail = signinfo+`` + `【文章阅读】已读/再读: `+ readnum +`/`+readtitle+` 篇\n`+`【阅读红包】已开/总计: `+openreadred+`/`+readredtotal+` 个🧧\n`+ `【观看视频】已看/再看: `+ videonum +`/`+videotitle+` 分钟\n`+`【视频红包】已开/总计: `+openvideored+`/`+videoredtotal+` 个🧧\n【每日一句】`+Dictum
+  };
+  console.log(subTile+`\n`+detail)
+ if(notifyInterval==1){
+   sy.msg(cookieName,subTile,detail,{ "open-url": "https://news.qq.com/FERD/cjRedDown.htm" })
   }
-  sy.log(subTile+`\n`+detail)
-   if
+   else if
 (openvideored%notifyInterval==0&&videocoins=="红包+1"){
    sy.msg(cookieName,subTile,detail)
   }
    else if (openreadred==readredtotal&&openvideored==videoredtotal){
    sy.msg(cookieName+` 今日任务已完成✅`,subTile,detail)
   }
-   else if(notifyInterval==1){
-   sy.msg(cookieName,subTile,detail)
-  }
  })
 resolve()
 }
 
 
-function init() {
-  isSurge = () => {
-    return undefined !== this.$httpClient
-  }
-  isQuanX = () => {
-    return undefined !== this.$task
-  }
-  getdata = (key) => {
-    if (isSurge()) return $persistentStore.read(key)
-    if (isQuanX()) return $prefs.valueForKey(key)
-  }
-  setdata = (key, val) => {
-    if (isSurge()) return $persistentStore.write(key, val)
-    if (isQuanX()) return $prefs.setValueForKey(key, val)
-  }
-  msg = (title, subtitle = '', body = '') => {
-    if (isSurge()) $notification.post(title, subtitle, body)
-    if (isQuanX()) $notify(title, subtitle, body)
-  }
-  log = (msg) => {
-    console.log(`${msg}\n`)
-  }
-  get = (options, callback) => {
-    if (isQuanX()) {
-      if (typeof options == 'string') options = { url: options }
-      options['method'] = 'GET'
-      return $task.fetch(options).then(
-        (response) => {
-          response['status'] = response.statusCode
-          callback(null, response, response.body)
-        },
-        (reason) => callback(reason.error, null, null)
-      )
-    }
-    if (isSurge()) return $httpClient.get(options, callback)
-  }
-  post = (options, callback) => {
-    if (isQuanX()) {
-      if (typeof options == 'string') options = { url: options }
-      options['method'] = 'POST'
-      $task.fetch(options).then(
-        (response) => {
-          response['status'] = response.statusCode
-          callback(null, response, response.body)
-        },
-        (reason) => callback(reason.error, null, null)
-      )
-    }
-    if (isSurge()) $httpClient.post(options, callback)
-  }
-  done = (value = {}) => {
-    $done(value)
-  }
-  return { isSurge, isQuanX, msg, log, getdata, setdata, get, post, done }
-}
+function Env(t,s){return new class{constructor(t,s){this.name=t,this.data=null,this.dataFile="box.dat",this.logs=[],this.logSeparator="\n",this.startTime=(new Date).getTime(),Object.assign(this,s),this.log("",`\ud83d\udd14${this.name}, \u5f00\u59cb!`)}isNode(){return"undefined"!=typeof module&&!!module.exports}isQuanX(){return"undefined"!=typeof $task}isSurge(){return"undefined"!=typeof $httpClient}isLoon(){return"undefined"!=typeof $loon}loaddata(){if(!this.isNode())return{};{this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),s=this.path.resolve(process.cwd(),this.dataFile),e=this.fs.existsSync(t),i=!e&&this.fs.existsSync(s);if(!e&&!i)return{};{const i=e?t:s;try{return JSON.parse(this.fs.readFileSync(i))}catch(t){return{}}}}}writedata(){if(this.isNode()){this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),s=this.path.resolve(process.cwd(),this.dataFile),e=this.fs.existsSync(t),i=!e&&this.fs.existsSync(s),o=JSON.stringify(this.data);e?this.fs.writeFileSync(t,o):i?this.fs.writeFileSync(s,o):this.fs.writeFileSync(t,o)}}lodash_get(t,s,e){const i=s.replace(/\[(\d+)\]/g,".$1").split(".");let o=t;for(const t of i)if(o=Object(o)[t],void 0===o)return e;return o}lodash_set(t,s,e){return Object(t)!==t?t:(Array.isArray(s)||(s=s.toString().match(/[^.[\]]+/g)||[]),s.slice(0,-1).reduce((t,e,i)=>Object(t[e])===t[e]?t[e]:t[e]=Math.abs(s[i+1])>>0==+s[i+1]?[]:{},t)[s[s.length-1]]=e,t)}getdata(t){let s=this.getval(t);if(/^@/.test(t)){const[,e,i]=/^@(.*?)\.(.*?)$/.exec(t),o=e?this.getval(e):"";if(o)try{const t=JSON.parse(o);s=t?this.lodash_get(t,i,""):s}catch(t){s=""}}return s}setdata(t,s){let e=!1;if(/^@/.test(s)){const[,i,o]=/^@(.*?)\.(.*?)$/.exec(s),h=this.getval(i),a=i?"null"===h?null:h||"{}":"{}";try{const s=JSON.parse(a);this.lodash_set(s,o,t),e=this.setval(JSON.stringify(s),i),console.log(`${i}: ${JSON.stringify(s)}`)}catch(s){const h={};this.lodash_set(h,o,t),e=this.setval(JSON.stringify(h),i),console.log(`${i}: ${JSON.stringify(h)}`)}}else e=$.setval(t,s);return e}getval(t){return this.isSurge()||this.isLoon()?$persistentStore.read(t):this.isQuanX()?$prefs.valueForKey(t):this.isNode()?(this.data=this.loaddata(),this.data[t]):this.data&&this.data[t]||null}setval(t,s){return this.isSurge()||this.isLoon()?$persistentStore.write(t,s):this.isQuanX()?$prefs.setValueForKey(t,s):this.isNode()?(this.data=this.loaddata(),this.data[s]=t,this.writedata(),!0):this.data&&this.data[s]||null}initGotEnv(t){this.got=this.got?this.got:require("got"),this.cktough=this.cktough?this.cktough:require("tough-cookie"),this.ckjar=this.ckjar?this.ckjar:new this.cktough.CookieJar,t&&(t.headers=t.headers?t.headers:{},void 0===t.headers.Cookie&&void 0===t.cookieJar&&(t.cookieJar=this.ckjar))}get(t,s=(()=>{})){t.headers&&(delete t.headers["Content-Type"],delete t.headers["Content-Length"]),this.isSurge()||this.isLoon()?$httpClient.get(t,(t,e,i)=>{!t&&e&&(e.body=i,e.statusCode=e.status,s(t,e,i))}):this.isQuanX()?$task.fetch(t).then(t=>{const{statusCode:e,statusCode:i,headers:o,body:h}=t;s(null,{status:e,statusCode:i,headers:o,body:h},h)},t=>s(t)):this.isNode()&&(this.initGotEnv(t),this.got(t).on("redirect",(t,s)=>{try{const e=t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();this.ckjar.setCookieSync(e,null),s.cookieJar=this.ckjar}catch(t){this.logErr(t)}}).then(t=>{const{statusCode:e,statusCode:i,headers:o,body:h}=t;s(null,{status:e,statusCode:i,headers:o,body:h},h)},t=>s(t)))}post(t,s=(()=>{})){if(t.body&&t.headers&&!t.headers["Content-Type"]&&(t.headers["Content-Type"]="application/x-www-form-urlencoded"),delete t.headers["Content-Length"],this.isSurge()||this.isLoon())$httpClient.post(t,(t,e,i)=>{!t&&e&&(e.body=i,e.statusCode=e.status),s(t,e,i)});else if(this.isQuanX())t.method="POST",$task.fetch(t).then(t=>{const{statusCode:e,statusCode:i,headers:o,body:h}=t;s(null,{status:e,statusCode:i,headers:o,body:h},h)},t=>s(t));else if(this.isNode()){this.initGotEnv(t);const{url:e,...i}=t;this.got.post(e,i).then(t=>{const{statusCode:e,statusCode:i,headers:o,body:h}=t;s(null,{status:e,statusCode:i,headers:o,body:h},h)},t=>s(t))}}msg(s=t,e="",i="",o){const h=t=>!t||!this.isLoon()&&this.isSurge()?t:"string"==typeof t?this.isLoon()?t:this.isQuanX()?{"open-url":t}:void 0:"object"==typeof t&&(t["open-url"]||t["media-url"])?this.isLoon()?t["open-url"]:this.isQuanX()?t:void 0:void 0;this.isSurge()||this.isLoon()?$notification.post(s,e,i,h(o)):this.isQuanX()&&$notify(s,e,i,h(o)),this.logs.push("","==============\ud83d\udce3\u7cfb\u7edf\u901a\u77e5\ud83d\udce3=============="),this.logs.push(s),e&&this.logs.push(e),i&&this.logs.push(i)}log(...t){t.length>0?this.logs=[...this.logs,...t]:console.log(this.logs.join(this.logSeparator))}logErr(t,s){const e=!this.isSurge()&&!this.isQuanX()&&!this.isLoon();e?$.log("",`\u2757\ufe0f${this.name}, \u9519\u8bef!`,t.stack):$.log("",`\u2757\ufe0f${this.name}, \u9519\u8bef!`,t.message)}wait(t){return new Promise(s=>setTimeout(s,t))}done(t={}){const s=(new Date).getTime(),e=(s-this.startTime)/1e3;this.log("",`\ud83d\udd14${this.name}, \u7ed3\u675f! \ud83d\udd5b ${e} \u79d2`),this.log(),(this.isSurge()||this.isQuanX()||this.isLoon())&&$done(t)}}(t,s)}
