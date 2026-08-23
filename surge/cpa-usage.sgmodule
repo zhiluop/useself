@@ -1,0 +1,10 @@
+#!name=CPA Daily Usage
+#!desc=查看 CPA (CPA Manager Plus) 今日 Token 与金额消耗
+#!author=CPA-Surge-Panel
+#!howto=将模块内容复制到本地后，根据实际服务地址与 Admin Key 修改 argument 中的 url 与 key。url 默认 http://127.0.0.1:18317
+
+[Panel]
+CPAUsage = script-name=CPAUsage,update-interval=1
+
+[Script]
+CPAUsage = type=generic,script-path=cpa-usage.js,argument=url=http://127.0.0.1:18317&key=YOUR_ADMIN_KEY&icon=dollar.circle&tz=Asia/Shanghai
