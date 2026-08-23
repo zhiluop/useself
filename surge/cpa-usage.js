@@ -52,9 +52,6 @@ function fmtTokens(n) {
 
 function fmtCost(n) {
   n = Number(n || 0);
-  if (n === 0) return '0';
-  if (n < 0.000001) return '<0.000001';
-  if (n < 1) return n.toFixed(6).replace(/0+$/, '').replace(/\.$/, '');
   return n.toFixed(2);
 }
 
@@ -82,14 +79,19 @@ function getTitle(today) {
   return `今日 $${cost} · ${tokens} Tokens`;
 }
 
+// 中文等宽对齐：把标签 pad 到固定显示宽度
+function pad(label, value, width) {
+  let visual = 0;
+  for (const ch of label) visual += ch.charCodeAt(0) > 0xff ? 2 : 1;
+  let padLen = width - visual;
+  if (padLen < 1) padLen = 1;
+  return label + ' '.repeat(padLen) + value;
+}
+
 function render(today, topModels) {
   const lines = [];
-  lines.push(
-    `成本 $${fmtCost(today.total_cost)}  |  Tokens ${fmtTokens(today.total_tokens)}`
-  );
-  lines.push(
-    `调用 ${fmtInt(today.total_calls)}  |  成功率 ${(today.success_rate * 100).toFixed(1)}%`
-  );
+  lines.push(pad('成本', `$${fmtCost(today.total_cost)}`, 5) + ' │ ' + pad('Tokens', fmtTokens(today.total_tokens), 8));
+  lines.push(pad('调用', `${fmtInt(today.total_calls)} 次`, 5) + ' │ ' + pad('成功率', `${(today.success_rate * 100).toFixed(1)}%`, 8));
   if (topModels && topModels.length) {
     lines.push(
       topModels
