@@ -82,31 +82,23 @@ function getTitle(today) {
   return `今日 $${cost} · ${tokens} Tokens`;
 }
 
-function pad(label, value, width) {
-  // 中文标签按 2 列宽对齐，保证等宽观感
-  const labelWidth = width || 7;
-  let visual = 0;
-  for (const ch of label) visual += ch.charCodeAt(0) > 0xff ? 2 : 1;
-  let padLen = labelWidth - visual;
-  if (padLen < 1) padLen = 1;
-  return label + ' '.repeat(padLen) + value;
-}
-
 function render(today, topModels) {
   const lines = [];
-  lines.push(pad('成本', '$' + fmtCost(today.total_cost)));
-  lines.push(pad('Tokens', fmtTokens(today.total_tokens)));
-  lines.push(pad('调用', fmtInt(today.total_calls) + ' 次'));
-  lines.push(pad('成功率', (today.success_rate * 100).toFixed(1) + '%'));
+  lines.push(
+    `成本 $${fmtCost(today.total_cost)}  |  Tokens ${fmtTokens(today.total_tokens)}`
+  );
+  lines.push(
+    `调用 ${fmtInt(today.total_calls)}  |  成功率 ${(today.success_rate * 100).toFixed(1)}%`
+  );
   if (topModels && topModels.length) {
-    lines.push('');
-    lines.push('── 主要模型 ──');
-    topModels.slice(0, 3).forEach((m) => {
-      lines.push(`${m.model}\n   ${fmtTokens(m.tokens)} tok · $${fmtCost(m.cost)}`);
-    });
+    lines.push(
+      topModels
+        .slice(0, 3)
+        .map((m) => `${m.model} $${fmtCost(m.cost)}`)
+        .join('  ')
+    );
   }
   const triggerLabel = TRIGGER === 'button' ? '手动' : '自动';
-  lines.push('');
   lines.push(new Date().toLocaleTimeString() + ` · ${triggerLabel}刷新`);
   $done({
     title: 'CPA 今日用量',
