@@ -82,29 +82,32 @@ function getTitle(today) {
   return `今日 $${cost} · ${tokens} Tokens`;
 }
 
+function pad(label, value, width) {
+  // 中文标签按 2 列宽对齐，保证等宽观感
+  const labelWidth = width || 7;
+  let visual = 0;
+  for (const ch of label) visual += ch.charCodeAt(0) > 0xff ? 2 : 1;
+  let padLen = labelWidth - visual;
+  if (padLen < 1) padLen = 1;
+  return label + ' '.repeat(padLen) + value;
+}
+
 function render(today, topModels) {
   const lines = [];
-  lines.push(`Token 总量: ${fmtInt(today.total_tokens)}`);
-  lines.push(
-    `输入 ${fmtTokens(today.input_tokens)} · 输出 ${fmtTokens(today.output_tokens)} · 缓存 ${fmtTokens(today.cached_tokens)}`
-  );
-  lines.push(`服务端估算成本: $${fmtCost(today.total_cost)}`);
-  lines.push(
-    `调用: ${fmtInt(today.total_calls)} 次 · 成功率: ${(today.success_rate * 100).toFixed(1)}%`
-  );
+  lines.push(pad('成本', '$' + fmtCost(today.total_cost)));
+  lines.push(pad('Tokens', fmtTokens(today.total_tokens)));
+  lines.push(pad('调用', fmtInt(today.total_calls) + ' 次'));
+  lines.push(pad('成功率', (today.success_rate * 100).toFixed(1) + '%'));
   if (topModels && topModels.length) {
-    lines.push('---');
-    lines.push('今日主要模型:');
-    topModels.slice(0, 5).forEach((m) => {
-      lines.push(
-        `${m.model}: ${fmtTokens(m.tokens)} tokens · $${fmtCost(m.cost)} · ${fmtInt(m.calls)} 次`
-      );
+    lines.push('');
+    lines.push('── 主要模型 ──');
+    topModels.slice(0, 3).forEach((m) => {
+      lines.push(`${m.model}\n   ${fmtTokens(m.tokens)} tok · $${fmtCost(m.cost)}`);
     });
   }
-  lines.push('---');
   const triggerLabel = TRIGGER === 'button' ? '手动' : '自动';
-  lines.push(`更新时间: ${new Date().toLocaleTimeString()}（${triggerLabel}刷新）`);
-  const sub = `调用 ${fmtInt(today.total_calls)} 次 · 成功率 ${(today.success_rate * 100).toFixed(1)}%`;
+  lines.push('');
+  lines.push(new Date().toLocaleTimeString() + ` · ${triggerLabel}刷新`);
   $done({
     title: 'CPA 今日用量',
     subtitle: getTitle(today),
@@ -112,7 +115,6 @@ function render(today, topModels) {
     icon: ICON,
     'icon-color': '#34C759'
   });
-  void sub;
 }
 
 function requestSummary() {
