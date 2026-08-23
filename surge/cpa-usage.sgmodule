@@ -7,4 +7,4 @@
 CPAUsage = script-name=CPAUsage,update-interval=1
 
 [Script]
-CPAUsage = type=generic,script-path=cpa-usage.js,argument=url=http://127.0.0.1:18317&key=YOUR_ADMIN_KEY&icon=dollar.circle&tz=Asia/Shanghai
+CPAUsage = type=generic,script-path=https://raw.githubusercontent.com/zhiluop/useself/master/surge/cpa-usage.js,argument=url=http://127.0.0.1:18317&key=YOUR_ADMIN_KEY&icon=dollar.circle&tz=Asia/Shanghai
