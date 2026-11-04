@@ -184,7 +184,7 @@ function fmtCost(value) {
   return n.toFixed(2);
 }
 
-// 等宽排版：中文按两格宽算，靠空格对齐才不会歪
+// 面板字体是比例字体，空格对不齐，这里只用来估算截断长度：中文按两格算
 function cellWidth(ch) {
   const code = ch.charCodeAt(0);
   // U+2BFF 以下基本是西文/符号（含 … ─ ▁ ▇），等宽字体里占一格；
@@ -195,24 +195,6 @@ function cellWidth(ch) {
 function visualWidth(text) {
   let width = 0;
   for (const ch of String(text)) width += cellWidth(ch);
-  return width;
-}
-
-function ljust(text, width) {
-  const gap = width - visualWidth(text);
-  return gap > 0 ? text + repeat(' ', gap) : String(text);
-}
-
-function rjust(text, width) {
-  const gap = width - visualWidth(text);
-  return gap > 0 ? repeat(' ', gap) + text : String(text);
-}
-
-function maxWidth(values) {
-  let width = 0;
-  for (let index = 0; index < values.length; index += 1) {
-    width = Math.max(width, visualWidth(values[index]));
-  }
   return width;
 }
 
@@ -229,22 +211,6 @@ function clip(text, width) {
     used += cell;
   }
   return `${out}…`;
-}
-
-const SPARK_BLOCKS = '▁▂▃▄▅▆▇█';
-
-function sparkline(values) {
-  const nums = (values && values.length ? values : []).map(number);
-  if (!nums.length) return '';
-  const max = Math.max.apply(null, nums);
-  if (!(max > 0)) return repeat(SPARK_BLOCKS[0], nums.length);
-  const top = SPARK_BLOCKS.length - 1;
-  return nums
-    .map((value) => {
-      if (value <= 0) return SPARK_BLOCKS[0];
-      return SPARK_BLOCKS[Math.max(1, Math.min(top, Math.ceil((value / max) * top)))];
-    })
-    .join('');
 }
 
 // ==================== 数据归一化 ====================
@@ -426,67 +392,45 @@ function buildTitle(usage) {
   return `今日 $${fmtCost(costOf(usage))} · ${fmtTokens(usage.tokens)} tok`;
 }
 
-// 表格骨架：标签列固定 6 格，列间空两格，费用右对齐
-const LABEL_WIDTH = 6;
-const COLUMN_GAP = '  ';
-const ROW_RULE = '-';
+// 面板字体是比例字体：靠空格右对齐会在数字变化时错位，所以只做「标签 + 值」的等节奏排版。
+// 标签统一两个汉字宽，续行用两个全角空格（= 两个汉字宽），这样任何字号下都对齐。
+const LABEL_GAP = '  ';
+const CONTINUATION_INDENT = '　　';
+const DIVIDER = repeat('-', 30);
+const WEEK_LABEL = WEEK_DAYS === 7 ? '一周' : '两周';
+const MODEL_NAME_LIMIT = 24;
 
-function labelCell(label) {
-  return ljust(String(label || ''), LABEL_WIDTH);
+function row(label, value) {
+  return label + LABEL_GAP + value;
 }
 
-function tableRow(label, cells) {
-  return labelCell(label) + cells.join(COLUMN_GAP);
-}
-
-// 明细行：左边内容（超长截断），右边金额贴到表格右边缘
-function detailRow(label, text, rightText, width) {
-  const money = String(rightText || '');
-  const room = Math.max(1, width - LABEL_WIDTH - visualWidth(money) - 1);
-  const line = labelCell(label) + clip(text, room);
-  if (!money) return line;
-  const gap = width - visualWidth(line) - visualWidth(money);
-  return gap > 0 ? line + repeat(' ', gap) + money : `${line} ${money}`;
+function usageLine(label, usage) {
+  return row(
+    label,
+    [`$${fmtCost(costOf(usage))}`, `${fmtTokens(usage.tokens)} tok`, `${fmtInt(usage.requests)} 次`].join(' · ')
+  );
 }
 
 function buildContent(state) {
   const today = state.today || emptyUsage();
-  const rows = [];
+  const rows = [usageLine('今日', today)];
 
-  const entries = [{ label: '今日', usage: today }];
-  if (state.total) entries.push({ label: '累计', usage: state.total });
+  if (state.total) rows.push(usageLine('累计', state.total));
 
-  const moneyCells = entries.map((entry) => `$${fmtCost(costOf(entry.usage))}`);
-  const tokenCells = entries.map((entry) => `${fmtTokens(entry.usage.tokens)} tok`);
-  const callCells = entries.map((entry) => `${fmtInt(entry.usage.requests)} 次`);
+  rows.push(DIVIDER);
 
-  const moneyWidth = maxWidth(moneyCells);
-  const tokenWidth = maxWidth(tokenCells);
-  const callWidth = maxWidth(callCells);
-
-  entries.forEach((entry, index) => {
-    rows.push(
-      tableRow(entry.label, [
-        rjust(moneyCells[index], moneyWidth),
-        rjust(tokenCells[index], tokenWidth),
-        rjust(callCells[index], callWidth)
-      ])
-    );
-  });
-
-  const tableWidth = LABEL_WIDTH + moneyWidth + tokenWidth + callWidth + COLUMN_GAP.length * 2;
-  rows.push(repeat(ROW_RULE, tableWidth));
-
-  if (state.accounts) rows.push(labelCell('账号') + state.accounts);
-
-  if (state.week && state.week.spark) {
-    rows.push(detailRow(`${WEEK_DAYS}日`, state.week.spark, `$${fmtCost(costOf(state.week.usage))}`, tableWidth));
+  if (state.week) {
+    const weekCost = costOf(state.week.usage);
+    rows.push(row(WEEK_LABEL, `$${fmtCost(weekCost)} · 日均 $${fmtCost(weekCost / WEEK_DAYS)}`));
   }
 
   const models = state.models && state.models.length ? state.models.slice(0, 2) : [];
   models.forEach((model, index) => {
-    rows.push(detailRow(index === 0 ? '模型' : '', model.model, `$${fmtCost(costOf(model))}`, tableWidth));
+    const name = clip(model.model, MODEL_NAME_LIMIT);
+    rows.push(row(index === 0 ? '模型' : CONTINUATION_INDENT, `${name} $${fmtCost(costOf(model))}`));
   });
+
+  if (state.accounts) rows.push(row('账号', state.accounts));
 
   const refreshedAt = state.refreshedAt instanceof Date ? state.refreshedAt : new Date();
   if (TIME_ZONE_ERROR) {
@@ -542,7 +486,7 @@ function loadWeekTrend(state, paths, weekStart, today) {
       const result = unwrapResponse(status, parsed, parseError);
       if (!result.error) {
         const points = result.data.trend && result.data.trend.length ? result.data.trend : [];
-        state.week = { spark: sparkline(points.map((point) => tokensOf(point || {}))), usage: sumTrend(points) };
+        if (points.length) state.week = { usage: sumTrend(points) };
       }
     }
     // 走势只是装饰，取不到就不显示，不影响今日数据
@@ -654,21 +598,16 @@ if (typeof module !== 'undefined' && module.exports) {
     clip,
     costOf,
     dateString,
-    detailRow,
     fmtCost,
     fmtInt,
     fmtTokens,
-    ljust,
-    maxWidth,
     normalizeApiBase,
     normalizeModels,
-    rjust,
+    row,
     shiftDate,
-    sparkline,
     sumToday,
     sumTotals,
     sumTrend,
-    tableRow,
     todayString,
     unwrapResponse,
     visualWidth,
