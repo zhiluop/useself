@@ -1,0 +1,10 @@
+#!name=sub2api 用量
+#!desc=查看 sub2api 今日 Token、费用、调用次数与 Top 模型
+#!author=sub2api-Surge-Panel
+#!howto=把 argument 里的 url 改成你的 sub2api 地址（默认 http://127.0.0.1:8080）；key 填管理员访问密钥（系统设置 → 安全 → 管理员访问密钥），该密钥需要 dashboard.read 权限。user 模式则用 token= 填 JWT。
+
+[Panel]
+Sub2APIUsage = script-name=Sub2APIUsage,update-interval=300
+
+[Script]
+Sub2APIUsage = type=generic,script-path=https://raw.githubusercontent.com/zhiluop/useself/master/surge/sub2api-usage.js,argument=url=http://127.0.0.1:8080&key=YOUR_ADMIN_KEY&icon=dollarsign.circle&tz=Asia/Shanghai
